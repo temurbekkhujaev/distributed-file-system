@@ -11,9 +11,10 @@ Distributed file system like HDFS. It consists of one Master (NameNode) and mult
   - uuid
   
 ### How to run.
-  1. Edit `dfs.conf` for setting block size, replication factor and list storages (`storageid:host:port`)
+  1. Edit `dfs.conf` for setting block size, replication factor, list storages (`storageid:host:port`) and IPs of storage servers of running machines on cloud.
   2. Fire up master and storages on cloud(AWS).
-  3. Here avaiable commands with examples:
+  3. Fix the IP address in client.py to IP address of master server's running machine.
+### Here avaiable commands with examples:
 ```sh
 1) Initialize the DFS
 $ python3 client.py init
