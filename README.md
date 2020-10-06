@@ -63,6 +63,6 @@ Same as cp command, the only difference is that it deletes file1 from /dir1 afte
 ##### Stop it using Ctll + C so that it will end the namespace.
 
 ### TODO
-1) In write, copy, move commands need to decided, if there is file with same name, do we need to overwrite or decline the command?
-2) Need to add and store metadata about the files
-3) Need testing on cloud system by fixing number of storage servers as 3 and replication_factor 2. Then down one of storage server to see is DFS working correctly with extra replications? 
+1) In write, copy, move commands need to be decided, if there is already file with same name, do we need to overwrite(delete old and add new) or decline the command?
+2) Need to store metadata about the files and add new command -info to show these files metadata.
+3) Need testing on cloud system by fixing number of storage servers to 3 and replication_factor to 2. Then terminate one of storage server to see that DFS working correctly with added extra replications.
