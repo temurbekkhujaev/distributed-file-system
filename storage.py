@@ -5,7 +5,7 @@ import exiftool
 
 from rpyc.utils.server import ThreadedServer
 
-DATA_DIR="/mnt/c/users/user/desktop/ds/pydfs/storage/"
+DATA_DIR="storage/"
 
 class StorageService(rpyc.Service):
   class exposed_storage():
