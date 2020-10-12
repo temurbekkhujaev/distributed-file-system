@@ -14,11 +14,11 @@ class StorageService(rpyc.Service):
       if os.listdir(DATA_DIR):
         os.system("rm -r " + DATA_DIR + "*")
 
-    def exposed_put(self,block_uuid,data,minions):
+    def exposed_put(self,block_uuid,data,storages):
       with open(DATA_DIR+str(block_uuid),'w') as f:
         f.write(data)
-      if len(minions)>0:
-        self.forward(block_uuid,data,minions)
+      if len(storages)>0:
+        self.forward(block_uuid,data,storages)
 
     def exposed_get(self,block_uuid):
       block_addr=DATA_DIR+str(block_uuid)
@@ -43,7 +43,7 @@ class StorageService(rpyc.Service):
 
     def forward(self,block_uuid,data,storages):
       print ("8888: forwarding to:")
-      print (block_uuid, minions)
+      print (block_uuid, storages)
       storage=storages[0]
       storages=storages[1:]
       host,port=storage
@@ -51,6 +51,9 @@ class StorageService(rpyc.Service):
       con=rpyc.connect(host,port=port)
       storage = con.root.storage()
       storage.put(block_uuid,data,storages)
+
+    def delete_block(self,uuid):
+      pass
 
 if __name__ == "__main__":
   if not os.path.isdir(DATA_DIR): os.mkdir(DATA_DIR)
