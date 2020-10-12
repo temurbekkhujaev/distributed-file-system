@@ -10,7 +10,7 @@ import sys
 import os
 from collections import defaultdict
 
-DATA_DIR="/mnt/c/users/user/desktop/ds/pydfs/storage"
+DATA_DIR="storage"
 from rpyc.utils.server import ThreadedServer
 
 def int_handler(signal, frame):
