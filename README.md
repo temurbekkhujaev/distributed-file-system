@@ -13,6 +13,10 @@ Distributed file system like HDFS. It consists of one Master (NameNode) and mult
   - rpyc
   - uuid
   
+### Running it:
+- Install requirements
+- 
+  
 ### How to run.
   1. Edit `dfs.conf` for setting block size, replication factor, list storages (`storageid:host:port`) and IPs of storage servers of running machines on cloud.
   2. Fire up master and storages on cloud(AWS).
@@ -61,7 +65,7 @@ If file2 already exist in /dir1/dir2 then program returns error
 $ python3 client.py mv /dir1/file1 /dir1/dir2/file2
 Same as cp command, the only difference is that it deletes file1 from /dir1 after copying to /dir1/dir2
 
-1) Metadata of files in DFS(file size and number of blocks it occupy)
+11) Metadata of files in DFS(file size and number of blocks it occupy)
 $ python3 client.py info /dir1/file1
 To run this command /dir1/file1 should be avaiable in DFS
 
@@ -71,8 +75,6 @@ To run this command /dir1/file1 should be avaiable in DFS
 
 ### TODO
 1) In write, copy, move commands need to be decided, if there is already file with same name, do we need to overwrite(delete old and add new) or decline the command?
-2) Need to store metadata about the files and add new command -info to show these files metadata.
-3) Need testing on cloud system by fixing number of storage servers to 3 and replication_factor to 2. Then terminate one of storage server to see that DFS working correctly with added extra replications.
 
 ![](/res/pic1.png)
 ![](/res/pic2.png)
