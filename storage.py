@@ -1,7 +1,6 @@
 import rpyc
 import uuid
 import os
-import exiftool
 
 from rpyc.utils.server import ThreadedServer
 
@@ -26,14 +25,6 @@ class StorageService(rpyc.Service):
         return None
       with open(block_addr) as f:
         return f.read()   
-        
-    def exposed_info(self,block_uuid):
-      block_addr = DATA_DIR+str(block_uuid)
-      if not os.path.isfile(block_addr):
-        return None
-      with exiftool.ExifTool() as et:
-        metadata = et.get_metadata_batch([block_addr])
-      return metadata[0]
         
     def exposed_rmv(self,block_uuid):
       block_addr=DATA_DIR+str(block_uuid)
