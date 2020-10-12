@@ -48,18 +48,8 @@ def info(master,fname):
   if not file_table:
     LOG.error("File not found")
     return
-  metadata_info,metadata = ['File:FileModifyDate', 'File:FileAccessDate','File:FilePermissions'] , []
-  for block in file_table:
-    for m in [master.get_storages()[_] for _ in block[1]]:
-      metadata = info_from_storage(block[0],m)
-      if metadata:
-        break
-    else:
-        LOG.error("No blocks found. Possibly a corrupt file")
   print("File:Size ",master.get_metadata_entry(fname)[0])
   print("File:NumberOfBlocks ",master.get_metadata_entry(fname)[1])
-  for data in metadata_info:
-    print(data,metadata[data])  
 
 def remove_from_storage(block_uuid,storage):
   host,port = storage
@@ -118,7 +108,7 @@ def crt(master,source,dest):
     write_to_storage(block_uuid, '\n', storages)
 
 def main(args):
-  con=rpyc.connect("localhost",port=2131)
+  con=rpyc.connect("3.128.120.38",port=2131,config={"allow_all_attrs": True})
   master=con.root.Master()
 
   #Directory operations
