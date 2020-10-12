@@ -3,7 +3,7 @@
 ---
 # Contribution to the projects
 
-**Kerim Kochekov** namenode implementation, maintained communication between datanodes, client and namenode on AWS.
+**Kerim Kochekov** namenode implementation, maintained communication between datanodes, client and namenode on AWS and system testing
 
 **Temurbek Khujaev** storage side implementation,  docker continerizaton configuration and system testing
 
@@ -20,19 +20,19 @@ Distributed file system like HDFS. It consists of one Master (NameNode) and mult
 
 ```
 docker pull temurbekkhujaev/namenode
-docker run -d -p 2131:213 temurbekkhujaev/namenode
+docker run -d -p 2131:2131 temurbekkhujaev/namenode
 ```
 * run in datanode server
 
 ```
 docker pull temurbekkhujaev/datanode
-docker run -d -p 2131:213 temurbekkhujaev/datanode
+docker run -d -p 2131:2131 temurbekkhujaev/datanode
 ```
 and 
   
 ### How to run.
-  1. Edit `dfs.conf` for setting block size, replication factor, list storages (`storageid:host:port`) and IPs of storage servers of running machines on cloud.
-  2. Fire up master and storages on cloud(AWS).
+  1. Edit `dfs.conf` in master node for setting block size, replication factor, list storages (`storageid:host:port`) and IPs of storage servers of running machines on cloud.
+  2. Fire up master and storages on cloud(AWS) with docker.
   3. Fix the IP address in client.py to IP address of master server's running machine.
 ### Here avaiable commands with examples:
 ```sh
