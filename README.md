@@ -2,9 +2,13 @@
 
 ---
 # Contribution to the projects
+
 **Kerim Kochekov** namenode implementation, maintained communication between datanodes, client and namenode on AWS.
+
 **Temurbek Khujaev** storage side implementation,  docker continerizaton configuration and system testing
+
 **Farhod Khakimiyon** Corrected formats of commands, helped to debug code and populated report with images and testing.
+
 # DFS
 Distributed file system like HDFS. It consists of one Master (NameNode) and multiple Storages (DataNode). And a client for interaction. It will dump namespace information(dir_tree and file_tree) when given SIGINT and reload it when fired up next time(fs.img). Replicate data the way HDFS does(random). It will send data to 1st storage and that storage will send it to next one and so on. Reading done in similar manner. Will contact first storage for block, if fails then second and so on.  Uses RPyC library in Python for RPC. 
 
