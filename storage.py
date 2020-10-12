@@ -43,8 +43,6 @@ class StorageService(rpyc.Service):
       storage = con.root.storage()
       storage.put(block_uuid,data,storages)
 
-    def delete_block(self,uuid):
-      pass
 
 if __name__ == "__main__":
   if not os.path.isdir(DATA_DIR): os.mkdir(DATA_DIR)
