@@ -58,6 +58,10 @@ If file2 already exist in /dir1/dir2 then program returns error
 $ python3 client.py mv /dir1/file1 /dir1/dir2/file2
 Same as cp command, the only difference is that it deletes file1 from /dir1 after copying to /dir1/dir2
 
+1) Metadata of files in DFS(file size and number of blocks it occupy)
+$ python3 client.py info /dir1/file1
+To run this command /dir1/file1 should be avaiable in DFS
+
 
 ```
 ##### Stop it using Ctll + C so that it will end the namespace.
