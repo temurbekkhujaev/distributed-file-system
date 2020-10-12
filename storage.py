@@ -41,19 +41,16 @@ class StorageService(rpyc.Service):
         return
       os.remove(block_addr)
 
-    def forward(self,block_uuid,data,minions):
+    def forward(self,block_uuid,data,storages):
       print ("8888: forwarding to:")
       print (block_uuid, minions)
-      minion=minions[0]
-      minions=minions[1:]
-      host,port=minion
+      storage=storages[0]
+      storages=storages[1:]
+      host,port=storage
 
       con=rpyc.connect(host,port=port)
-      minion = con.root.Minion()
-      minion.put(block_uuid,data,minions)
-
-    def delete_block(self,uuid):
-      pass
+      storage = con.root.storage()
+      storage.put(block_uuid,data,storages)
 
 if __name__ == "__main__":
   if not os.path.isdir(DATA_DIR): os.mkdir(DATA_DIR)
