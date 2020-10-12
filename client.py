@@ -37,6 +37,30 @@ def get(master,fname,dest):
     else:
         LOG.error("No blocks found. Possibly a corrupt file")
 
+def info_from_storage(block_uuid,storage):
+  host,port = storage
+  con=rpyc.connect(host,port=port)
+  storage = con.root.storage()
+  return storage.info(block_uuid)
+
+def info(master,fname):
+  file_table = master.get_file_table_entry(fname)
+  if not file_table:
+    LOG.error("File not found")
+    return
+  metadata_info,metadata = ['File:FileModifyDate', 'File:FileAccessDate','File:FilePermissions'] , []
+  for block in file_table:
+    for m in [master.get_storages()[_] for _ in block[1]]:
+      metadata = info_from_storage(block[0],m)
+      if metadata:
+        break
+    else:
+        LOG.error("No blocks found. Possibly a corrupt file")
+  print("File:Size ",master.get_metadata_entry(fname)[0])
+  print("File:NumberOfBlocks ",master.get_metadata_entry(fname)[1])
+  for data in metadata_info:
+    print(data,metadata[data])  
+
 def remove_from_storage(block_uuid,storage):
   host,port = storage
   con=rpyc.connect(host,port=port)
@@ -130,6 +154,8 @@ def main(args):
     cp(master,args[1],args[2])
   elif args[0] == "mv":
     mv(master,args[1],args[2])
+  elif args[0] == "info":
+    info(master,args[1])
   else:
     LOG.error("command: not found")
 

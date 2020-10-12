@@ -14,7 +14,11 @@ DATA_DIR="/mnt/c/users/user/desktop/ds/pydfs/storage"
 from rpyc.utils.server import ThreadedServer
 
 def int_handler(signal, frame):
-  pickle.dump((MasterService.exposed_Master.file_table,MasterService.exposed_Master.tree),open('fs.img','wb'))
+  file = open('fs.img','wb')
+  pickle.dump(MasterService.exposed_Master.file_table, file)
+  pickle.dump(MasterService.exposed_Master.tree, file)
+  pickle.dump(MasterService.exposed_Master.metadata, file)
+  file.close()
   sys.exit(0)
 
 def set_conf():
@@ -28,12 +32,17 @@ def set_conf():
     MasterService.exposed_Master.storages[id]=(host,port)
 
   if os.path.isfile('fs.img'):
-    MasterService.exposed_Master.file_table,MasterService.exposed_Master.tree = pickle.load(open('fs.img','rb'))
+    file = open('fs.img','rb')
+    MasterService.exposed_Master.file_table = pickle.load(file)
+    MasterService.exposed_Master.tree = pickle.load(file)
+    MasterService.exposed_Master.metadata = pickle.load(file)
+    file.close()
 
 class MasterService(rpyc.Service):
   class exposed_Master():
     file_table = defaultdict(list)
     tree = defaultdict(list)
+    metadata = dict()
     storages = {}
     block_size = 0
     replication_factor = 0
@@ -41,6 +50,7 @@ class MasterService(rpyc.Service):
     def exposed_init(self):
       self.__class__.file_table = defaultdict(list)
       self.__class__.tree = defaultdict(list)
+      self.__class__.metadata = dict()
       self.__class__.tree[DATA_DIR].append('$')
       for storage in self.__class__.storages:
         host,port = self.__class__.storages[storage]
@@ -92,7 +102,8 @@ class MasterService(rpyc.Service):
         return "File already exist", []
       self.__class__.tree[dest[:-1]].append(source)
       self.__class__.file_table[dest+source]=[]
-      num_blocks = self.calc_num_blocks(size)
+      num_blocks = self.numof_blocks(size)
+      self.__class__.metadata[dest+source]=[size,num_blocks]
       blocks = self.alloc_blocks(dest+source,num_blocks)
       return "OK", blocks
 
@@ -103,9 +114,14 @@ class MasterService(rpyc.Service):
       else:
         return None
 
+    def exposed_get_metadata_entry(self,fname):
+      fname = DATA_DIR + fname
+      return self.__class__.metadata[fname]
+
     def exposed_rmv_file_table_entry(self,fname):
       fname = DATA_DIR + fname
       self.__class__.file_table[fname]=[]
+      self.__class__.metadata[fname]=[]
       self.__class__.tree[os.path.dirname(fname)].remove(os.path.basename(fname))
     
     def exposed_get_block_size(self):
@@ -114,7 +130,7 @@ class MasterService(rpyc.Service):
     def exposed_get_storages(self):
       return self.__class__.storages
 
-    def calc_num_blocks(self,size):
+    def numof_blocks(self,size):
       return int(math.ceil(float(size)/self.__class__.block_size))
 
     def file_exists(self,file):
