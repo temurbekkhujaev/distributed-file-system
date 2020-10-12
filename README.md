@@ -2,20 +2,29 @@
 
 ---
 # Contribution to the projects
-**Kerim Kochekov** namenode and datanode implementation, maintained communication between datanodes, client and namenode on AWS.
-**Temurbek Khujaev** docker-swarm configuration and system testing
-**Farhod Khakimiyon** Corrected formats of commands, helped to debug code and populated report with images
+**Kerim Kochekov** namenode implementation, maintained communication between datanodes, client and namenode on AWS.
+**Temurbek Khujaev** storage side implementation,  docker continerizaton configuration and system testing
+**Farhod Khakimiyon** Corrected formats of commands, helped to debug code and populated report with images and testing.
 # DFS
 Distributed file system like HDFS. It consists of one Master (NameNode) and multiple Storages (DataNode). And a client for interaction. It will dump namespace information(dir_tree and file_tree) when given SIGINT and reload it when fired up next time(fs.img). Replicate data the way HDFS does(random). It will send data to 1st storage and that storage will send it to next one and so on. Reading done in similar manner. Will contact first storage for block, if fails then second and so on.  Uses RPyC library in Python for RPC. 
 
-### Requirements:
-  - python3
-  - rpyc
-  - uuid
-  
+
+
 ### Running it:
 - Install requirements
-- 
+* run in namenode server
+
+```
+docker pull temurbekkhujaev/namenode
+docker run -d -p 2131:213 temurbekkhujaev/namenode
+```
+* run in datanode server
+
+```
+docker pull temurbekkhujaev/datanode
+docker run -d -p 2131:213 temurbekkhujaev/datanode
+```
+and 
   
 ### How to run.
   1. Edit `dfs.conf` for setting block size, replication factor, list storages (`storageid:host:port`) and IPs of storage servers of running machines on cloud.
@@ -72,9 +81,7 @@ To run this command /dir1/file1 should be avaiable in DFS
 
 ```
 ##### Stop it using Ctll + C so that it will end the namespace.
-
-### TODO
-1) In write, copy, move commands need to be decided, if there is already file with same name, do we need to overwrite(delete old and add new) or decline the command?
-
+### Architecture Diagramm
 ![](/res/pic1.png)
+### Architecture Diagramm
 ![](/res/pic2.png)

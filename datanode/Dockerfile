@@ -2,9 +2,9 @@ FROM python:3.7
 
 #WORKDIR /app
 
-#COPY . /app
+COPY . /
 
-RUN pip3 install -r requirements.txt
+RUN pip install -r requirements.txt
 
 EXPOSE 2131
 #WORKDIR /app/namenode
